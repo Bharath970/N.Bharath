@@ -1,0 +1,107 @@
+import   numpy   as   np 
+import   pandas   as   pd 
+import   seaborn   as   sns 
+import   matplotlib . pyplot   as   plt 
+from   sklearn . model_selection   import   train_test_split 
+from   sklearn . preprocessing   import   StandardScaler 
+from   sklearn   import   svm 
+from   sklearn . metrics   import   accuracy_score 
+from   sklearn   import   metrics 
+from   sklearn . linear_model   import   LogisticRegression 
+from   sklearn . ensemble   import   RandomForestClassifier 
+from   sklearn . metrics   import   accuracy_score ,  confusion_matrix ,  classification_report 
+import   os 
+import   warnings 
+
+os . getcwd () 
+
+os . chdir  ( 'C:\\Users\\BHARATH\\OneDrive\\Desktop' ) #address where the dataset is stored in your pc
+os . getcwd () 
+
+parkinsons_data = pd . read_csv ( 'parkinsons.data' ) #loading the dataset
+display ( parkinsons_data ) 
+
+import   pandas_profiling   as   pf 
+display ( pf . ProfileReport ( parkinsons_data )) #if module error of pandas_profiling occur. use "pip install pandas-profiling" to install module and then  restart the kernel and continue to execute code
+
+parkinsons_data . head () #prints first rows of dataset
+  
+parkinsons_data . shape #gives rows and columns of dataset
+
+parkinsons_data . columns #gives column headings in dataset
+
+parkinsons_data . info () #gives headings related info of dataset
+
+parkinsons_data . isnull (). sum () #checking for missing values in each column 
+
+parkinsons_data . describe () #getting some statistical measures about the data 
+
+parkinsons_data [ 'status' ]. value_counts ()   #distribution of target variable 
+
+parkinsons_data . groupby ( 'status' ). mean ()  #grouping the data based on the target variable 
+
+#Data Pre-Processing 
+#Separating the features & Target 
+X   =   parkinsons_data . drop ( columns = [ 'name' , 'status' ] ,  axis = 1 ) 
+Y   =   parkinsons_data [ 'status' ] 
+print ( X ) 
+
+print ( Y ) 
+
+#Splitting the data to training data & Test data 
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2, 
+random_state=2) print(X.shape, X_train.shape, X_test.shape) 
+
+#Data Standardization
+scaler = StandardScaler()
+scaler.fit(X_train)
+
+X_train = scaler.transform(X_train)
+X_test = scaler.transform(X_test)
+print(X_train)
+
+#Model Training 
+#Support Vector Machine Model
+model = svm.SVC(kernel='linear') #training the SVM model with training data 
+model.fit(X_train,Y_train)
+
+#Model Evaluation 
+#Accuracy Score
+# accuracy score on training data 
+X_train_prediction = model.predict(X_train) 
+training_data_accuracy = accuracy_score(Y_train, X_train_prediction) 
+print('Acuuracy score of training data :', training_data_accuracy) 
+
+# accuracy score on training data 
+X_test_prediction = model.predict(X_test) 
+test_data_accuracy = accuracy_score(Y_test, X_test_prediction) 
+print('Acuuracy score of test data :', test_data_accuracy) 
+
+#Predictive System
+input_data   =  ( replace status column of a row from dataset )
+# changing input data to a numpy array 
+input_data_as_numpy_array   =   np . asarray ( input_data ) 
+# reshape the numpy array 
+input_data_reshaped   =   input_data_as_numpy_array . reshape ( 1 , - 1 ) 
+# standardize the data 
+std_data   =   scaler . transform ( input_data_reshaped ) 
+prediction   =   model . predict ( std_data ) 
+print ( prediction ) 
+if  ( prediction [ 0 ]   ==   0 ): 
+     print ( "The Person does not have Parkinsons Disease" ) 
+else : 
+     print ( "The Person has Parkinsons" ) 
+
+input_data   =  ( replace status column of a row from dataset )
+# changing input data to a numpy array 
+input_data_as_numpy_array   =   np . asarray ( input_data ) 
+# reshape the numpy array 
+input_data_reshaped   =   input_data_as_numpy_array . reshape ( 1 , - 1 ) 
+# standardize the data 
+std_data   =   scaler . transform ( input_data_reshaped ) 
+prediction   =   model . predict ( std_data ) 
+print ( prediction ) 
+if  ( prediction [ 0 ]   ==   0 ): 
+     print ( "The Person does not have Parkinsons Disease" ) 
+else : 
+     print ( "The Person has Parkinsons" ) 
