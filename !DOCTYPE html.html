@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Clock</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        #clock {
+            font-size: 2em;
+            margin: 20px;
+        }
+
+        #dateTimeDisplay {
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+
+<div id="clock">00:00:00</div>
+<div id="dateTimeDisplay">dd-MM-yyyy HH:mm</div>
+<button onclick="stopClock()">Stop</button>
+<button onclick="refreshClock()">Refresh</button>
+
+<script>
+    let clockInterval;
+    let isClockRunning = true;
+
+    function updateClock() {
+        const now = new Date();
+        const hours = now.getHours().toString().padStart(2, '0');
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+        const seconds = now.getSeconds().toString().padStart(2, '0');
+        const dateTimeDisplay = now.toLocaleDateString('en-GB') + ' ' + hours + ':' + minutes;
+
+        document.getElementById('clock').innerText = `${hours}:${minutes}:${seconds}`;
+        document.getElementById('dateTimeDisplay').innerText = dateTimeDisplay;
+    }
+
+    function startClock() {
+        clockInterval = setInterval(updateClock, 1000);
+    }
+
+    function stopClock() {
+        clearInterval(clockInterval);
+        isClockRunning = false;
+    }
+
+    function refreshClock() {
+        if (!isClockRunning) {
+            startClock();
+            isClockRunning = true;
+        }
+        updateClock();
+    }
+
+    // Initial start of the clock
+    startClock();
+</script>
+
+</body>
+</html>
